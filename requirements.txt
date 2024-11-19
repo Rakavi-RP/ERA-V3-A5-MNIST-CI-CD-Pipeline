@@ -4,4 +4,5 @@ torchvision==0.17.0+cpu
 pytest
 matplotlib
 numpy<2.0
-pillow 
+pillow
+psutil 
