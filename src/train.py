@@ -14,9 +14,14 @@ def train():
     # Device configuration
     device = torch.device('cpu')
 
-    # MNIST dataset with augmentation for training
+    # MNIST dataset with same augmentations as visualization
     train_transform = transforms.Compose([
-        transforms.RandomRotation(degrees=30),  # Added rotation augmentation
+        transforms.RandomRotation(degrees=15),      # Mild rotation
+        transforms.RandomAffine(                    # Small shifts and scaling
+            degrees=0,
+            translate=(0.1, 0.1),                  # 10% shift
+            scale=(0.9, 1.1)                       # 10% scale change
+        ),
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
     ])

@@ -31,9 +31,14 @@ This project implements a simple Convolutional Neural Network (CNN) for MNIST di
 ## Features
 
 ### Data Augmentation
-- Random rotation (±30 degrees)
-- Visualization of original vs augmented images
-- Augmentation samples saved during training
+We apply three light augmentations during training:
+- Random rotation (±15 degrees)
+- Random shift (±10%)
+- Random scale (±10%)
+
+Sample augmentations showing original vs augmented digits:
+
+<img src="sample_images/augmentation_samples.png" alt="Augmentation Samples" width="800"/>
 
 ### Model Validation
 Basic Tests:
