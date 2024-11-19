@@ -18,7 +18,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install --extra-index-url https://download.pytorch.org/whl/cpu torch==2.2.0+cpu torchvision==0.17.0+cpu
-        pip install pytest
+        pip install pytest matplotlib numpy<2.0 pillow psutil
+        
+    - name: Generate augmentation samples
+      run: |
+        python src/show_augmentations.py
         
     - name: Train model
       run: |
@@ -28,8 +32,10 @@ jobs:
       run: |
         pytest src/test_model.py -v
         
-    - name: Archive model artifacts
+    - name: Archive artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: trained-model
-        path: models/ 
+        name: model-and-samples
+        path: |
+          models/
+          sample_images/

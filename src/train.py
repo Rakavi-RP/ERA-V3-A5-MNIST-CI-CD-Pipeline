@@ -14,15 +14,16 @@ def train():
     # Device configuration
     device = torch.device('cpu')
 
-    # MNIST dataset
-    transform = transforms.Compose([
+    # MNIST dataset with augmentation for training
+    train_transform = transforms.Compose([
+        transforms.RandomRotation(degrees=30),  # Added rotation augmentation
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
     ])
 
     train_dataset = datasets.MNIST(root='./data', 
                                  train=True, 
-                                 transform=transform,
+                                 transform=train_transform,
                                  download=True)
 
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
