@@ -2,78 +2,86 @@
 
 ![ML Pipeline](https://github.com/Rakavi-RP/ERA-V3-A5-MNIST-CI-CD-Pipeline/actions/workflows/ml-pipeline.yml/badge.svg)
 
-This project implements a simple Convolutional Neural Network (CNN) for MNIST digit classification with an automated CI/CD pipeline using GitHub Actions.
+## Introduction
+A Convolutional Neural Network (CNN) based MNIST digit classifier implementing automated testing pipeline and data augmentation techniques. The project demonstrates CI/CD practices in machine learning, ensuring model quality through comprehensive testing.
+
+## Requirements
+- Python 3.10+ (recommended)
+- PyTorch and torchvision (CPU version)
+- pytest (for testing)
+- matplotlib (for visualization)
+- numpy
+- pillow (for image processing)
+- psutil (for resource monitoring)
 
 ## Project Structure
 ```
 .
-├── .github
-│   └── workflows
-│       └── ml-pipeline.yml    # CI/CD workflow configuration
-├── src
-│   ├── model.py              # CNN model architecture
-│   ├── train.py              # Training script with augmentation
-│   ├── show_augmentations.py # Augmentation visualization
-│   └── test_model.py         # Testing and validation
-├── models/                   # Saved model artifacts
-├── sample_images/           # Augmented image samples
-├── .gitignore
-└── requirements.txt
+├── src/
+│   ├── model.py              # CNN architecture
+│   ├── train.py              # Training with augmentation
+│   ├── test_model.py         # Validation tests
+│   └── show_augmentations.py # Augmentation visualization
+├── .github/workflows/        # CI/CD configuration
+└── requirements.txt          # Dependencies
 ```
 
 ## Model Architecture
-- 2 Convolutional layers with ReLU activation and max pooling
-- 2 Fully connected layers
-- Less than 25,000 parameters
-- Input: 28x28 grayscale images
-- Output: 10 classes (digits 0-9)
+- Input Layer: 28x28 grayscale images
+- Convolutional Layers:
+  * Conv1: 6 filters, 3x3 kernel, ReLU, MaxPool
+  * Conv2: 12 filters, 3x3 kernel, ReLU, MaxPool
+- Fully Connected Layers:
+  * FC1: 588 → 24 units, ReLU
+  * FC2: 24 → 10 units (output)
+- Total Parameters: < 25,000
+
+## Training Details
+- Dataset: MNIST
+- Batch Size: 64
+- Optimizer: Adam (lr=0.001)
+- Loss Function: Cross Entropy Loss
+- Epochs: 1
+- Training Augmentation:
+  * Real-time data augmentation during training
+  * Random augmentations applied to each batch
+  * Validation performed on non-augmented test data
 
 ## Features
-
 ### Data Augmentation
-We apply three light augmentations during training:
+Training employs three mild augmentations:
 - Random rotation (±15 degrees)
 - Random shift (±10%)
 - Random scale (±10%)
 
-Sample augmentations showing original vs augmented digits:
-
+Augmentation samples showcasing how the training images are transformed:
 <img src="sample_images/augmentation_samples.png" alt="Augmentation Samples" width="800"/>
 
-### Model Validation
-Basic Tests:
-- Parameter count < 25,000
-- Input shape compatibility (28x28)
-- Output shape verification (10 classes)
+## Validation Tests
+### Basic Tests
+- Parameter count verification (< 25,000)
+- Input/Output shape validation
 - Overall accuracy > 95%
 
-Advanced Tests:
-1. Noise Robustness Test
+### Advanced Tests
+1. Noise Robustness
    - Adds 10% Gaussian noise
-   - Ensures predictions remain stable
-   - Accuracy drop < 10% with noise
-
-2. Gradient Health Test
+   - Validates prediction stability
+2. Gradient Health
    - Checks for vanishing/exploding gradients
    - Ensures proper gradient flow
-   - Validates training stability
-
-3. Class-wise Accuracy Test
-   - Tests each digit separately
+3. Class-wise Accuracy
    - Ensures >90% accuracy per digit
-   - Checks balanced performance across classes
-
-4. Prediction Confidence Test
-   - Verifies model confidence
-   - High confidence (>90%) for correct predictions
-   - Lower confidence (<80%) for incorrect ones
+   - Validates balanced performance
+4. Prediction Confidence
+   - Verifies high confidence for correct predictions
+   - Checks uncertainty for incorrect ones
 
 ## Setup and Running Locally
-
 1. Create and activate virtual environment:
 ```bash
 python -m venv env
-source env/bin/activate  # On Windows: env\Scripts\activate
+source env/bin/activate  # Windows: env\Scripts\activate
 ```
 
 2. Install dependencies:
@@ -86,7 +94,7 @@ pip install -r requirements.txt
 python src/show_augmentations.py
 ```
 
-4. Train the model:
+4. Train model:
 ```bash
 python src/train.py
 ```
@@ -97,45 +105,17 @@ python -m pytest src/test_model.py -v
 ```
 
 ## CI/CD Pipeline
-
-The GitHub Actions workflow automatically:
+The GitHub Actions workflow automates the following tasks to ensure a streamlined CI/CD process:
 1. Sets up Python environment
-2. Installs CPU-only PyTorch dependencies
-3. Generates augmentation samples
-4. Trains the model
-5. Runs all validation tests
-6. Stores artifacts (model & images)
-
-### Viewing Artifacts in GitHub Actions
-1. Go to the Actions tab in your repository
-2. Click on the latest workflow run
-3. Scroll down to "Artifacts"
-4. Download "model-and-samples" zip file
-5. Extract the zip file to see:
-   - `models/` folder containing trained model file (mnist_model_YYYYMMDD_HHMMSS.pth)
-   - `sample_images/` folder containing augmentation_samples.png showing:
-     * Top row: Original MNIST digits
-     * Bottom row: Same digits with random rotation
-
+2. Installs CPU-only dependencies
+3. Trains model with augmentation
+4. Runs all validation tests
+5. Archives trained model
 
 ## Model Artifacts
-
+These model files can be reused for inference or further fine-tuning.
 Trained models are saved with timestamps:
 ```
 mnist_model_YYYYMMDD_HHMMSS.pth
 ```
-
-## Requirements
-- Python 3.8+
-- PyTorch (CPU version)
-- pytest
-- matplotlib
-- numpy<2.0
-- pillow
-- psutil
-
-## Notes
-- Training limited to 1 epoch
-- All computations are CPU-based for CI/CD compatibility
-- Augmentation helps improve model robustness
-- Comprehensive testing ensures model quality
+These can be found in the models/ directory after training or in GitHub Actions artifacts.
